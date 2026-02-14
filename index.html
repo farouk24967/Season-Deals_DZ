@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Season Deals DZ - Meilleures Offres</title>
+    <link rel="icon" type="image/png" href="public/photos/Season-Deals_Dz.png" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#111827', // Dark background
+                            navy: '#1F2937', // Card background
+                            orange: '#f97316', // Orange type "Deal"
+                            gold: '#eab308',   // Gold accents
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #f97316;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 4px;
+            background: #374151;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        /* Animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Mobile Menu Button -->
+            <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
+                class="lg:hidden text-gray-300 hover:text-white">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 cursor-pointer">
+                <div
+                    class="h-10 w-10 overflow-hidden rounded-full border border-gray-700 bg-gray-800 flex items-center justify-center">
+                    <img src="public/photos/Season-Deals_Dz.png"
+                        onerror="this.src='https://placehold.co/100x100/1f2937/FFF?text=SD'" alt="Logo"
+                        class="h-full w-full object-cover">
+                </div>
+                <h1
+                    class="hidden sm:block text-xl font-bold bg-gradient-to-r from-brand-orange to-brand-gold bg-clip-text text-transparent">
+                    SEASON DEALS
+                </h1>
+            </a>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden lg:flex flex-1 mx-12">
+                <div class="relative w-full max-w-xl mx-auto">
+                    <input type="text" id="search-input" placeholder="Rechercher un produit..."
+                        class="w-full bg-gray-800 text-gray-200 border border-gray-700 rounded-full py-2.5 pl-5 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-gold/50 transition-all placeholder-gray-500">
+                    <button
+                        class="absolute right-1 top-1 p-1.5 bg-gradient-to-r from-brand-orange to-brand-gold rounded-full text-white hover:opacity-90 transition-opacity">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center gap-6">
+                <button class="text-gray-300 hover:text-brand-gold transition relative">
+                    <i class="fa-solid fa-heart text-xl"></i>
+                    <span id="wishlist-count-badge"
+                        class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button onclick="toggleCart()" class="text-gray-300 hover:text-brand-gold transition relative">
+                    <i class="fa-solid fa-shopping-cart text-xl"></i>
+                    <span id="cart-count-badge"
+                        class="hidden absolute -top-2 -right-2 bg-brand-orange text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-gray-800 border-b border-gray-700 p-4">
+            <input type="text" placeholder="Rechercher..."
+                oninput="state.filters.search=this.value.toLowerCase();renderProducts()"
+                class="w-full bg-gray-900 border border-gray-700 rounded-lg py-2 px-4 mb-4 text-white">
+            <a href="#" class="block py-2 text-brand-gold font-medium">Accueil</a>
+            <a href="#about" class="block py-2 text-gray-300 hover:text-white">Qui sommes-nous ?</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+
+        <!-- Hero Carousel -->
+        <section id="hero-carousel"
+            class="relative w-full h-[300px] md:h-[400px] bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-gray-800 mb-12 group">
+            <div id="carousel-track" class="w-full h-full flex transition-transform duration-700 ease-in-out">
+                <!-- Slides injected by JS -->
+            </div>
+        </section>
+
+        <!-- Layout: Sidebar + Grid -->
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- Sidebar Filters -->
+            <aside id="sidebar-filters" class="w-full lg:w-64 flex-shrink-0 space-y-8">
+                <!-- Categories -->
+                <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 shadow-lg">
+                    <div class="flex items-center gap-2 mb-6 text-brand-gold">
+                        <i class="fa-solid fa-sliders text-lg"></i>
+                        <h3 class="font-bold text-lg text-white">Catégories</h3>
+                    </div>
+                    <ul id="category-list" class="space-y-1">
+                        <!-- Categories injected by JS -->
+                    </ul>
+                </div>
+
+                <!-- Price Filter -->
+                <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 shadow-lg">
+                    <h3 class="font-bold text-lg text-white mb-4">Prix Max: <span id="price-max-display">100000</span>
+                        DA</h3>
+                    <input type="range" id="price-range" min="0" max="100000" step="500" value="100000"
+                        class="w-full mb-4">
+                    <button id="apply-price"
+                        class="w-full py-2 border border-gray-700 text-gray-300 rounded-lg hover:border-brand-gold hover:text-brand-gold hover:bg-gray-800 transition-all text-sm font-medium">
+                        Appliquer
+                    </button>
+                </div>
+
+                <!-- Promo Banner -->
+                <div
+                    class="bg-gradient-to-br from-brand-orange to-red-600 rounded-xl p-6 text-white text-center shadow-lg">
+                    <h4 class="font-bold text-xl mb-2">-20% PROMO</h4>
+                    <p class="text-sm opacity-90 mb-4">Sur la sélection été ce week-end !</p>
+                    <button
+                        class="bg-white text-brand-orange px-4 py-2 rounded-lg text-sm font-bold w-full hover:bg-gray-100 transition">En
+                        profiter</button>
+                </div>
+            </aside>
+
+            <!-- Products Grid -->
+            <section class="flex-1">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Nos Produits</h2>
+                    <span class="text-gray-400 text-sm"><span id="products-count">0</span> résultats</span>
+                </div>
+                <div id="products-container"
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+                    <!-- Products injected by JS -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Why Us Section -->
+    <section class="py-16 bg-brand-dark border-t border-gray-800 mt-12 reveal">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Pourquoi choisir SeasonDeals ?</h2>
+                <div class="h-1 w-20 bg-brand-orange mx-auto rounded-full"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div
+                    class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-brand-orange/50 transition group hover:-translate-y-2 duration-300">
+                    <div
+                        class="h-14 w-14 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-brand-orange/20 transition-colors">
+                        <i class="fa-solid fa-shield-halved text-brand-orange text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold mb-2">Qualité Testée</h3>
+                    <p class="text-gray-400 text-sm">Produits rigoureusement sélectionnés.</p>
+                </div>
+                <div
+                    class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-brand-orange/50 transition group hover:-translate-y-2 duration-300">
+                    <div
+                        class="h-14 w-14 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-brand-orange/20 transition-colors">
+                        <i class="fa-solid fa-truck text-brand-orange text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold mb-2">Livraison 58 Wilayas</h3>
+                    <p class="text-gray-400 text-sm">Partout en Algérie avec Yalidine.</p>
+                </div>
+                <div
+                    class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-brand-orange/50 transition group hover:-translate-y-2 duration-300">
+                    <div
+                        class="h-14 w-14 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-brand-orange/20 transition-colors">
+                        <i class="fa-solid fa-thumbs-up text-brand-orange text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold mb-2">Paiement à la livraison</h3>
+                    <p class="text-gray-400 text-sm">Zéro risque, 100% confiance.</p>
+                </div>
+                <div
+                    class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-brand-orange/50 transition group hover:-translate-y-2 duration-300">
+                    <div
+                        class="h-14 w-14 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-brand-orange/20 transition-colors">
+                        <i class="fa-solid fa-headset text-brand-orange text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold mb-2">Support 7j/7</h3>
+                    <p class="text-gray-400 text-sm">Une équipe à votre écoute.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-12 bg-gray-900 border-t border-gray-800 reveal">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <h2 class="text-3xl font-bold text-white text-center mb-10">Questions Fréquentes</h2>
+            <div class="space-y-4">
+                <details
+                    class="bg-gray-800 rounded-xl group border border-gray-700 open:border-brand-orange/50 transition-colors">
+                    <summary
+                        class="flex justify-between items-center p-5 cursor-pointer list-none text-white font-medium hover:text-brand-orange transition-colors">
+                        Comment passer une commande ?
+                        <span class="transition-transform group-open:rotate-180"><i
+                                class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="p-5 pt-0 text-gray-400 text-sm border-t border-gray-700 mt-2">
+                        Choisissez le produit, cliquez sur "Acheter", remplissez le formulaire. On vous appelle pour
+                        confirmer !
+                    </div>
+                </details>
+                <details
+                    class="bg-gray-800 rounded-xl group border border-gray-700 open:border-brand-orange/50 transition-colors">
+                    <summary
+                        class="flex justify-between items-center p-5 cursor-pointer list-none text-white font-medium hover:text-brand-orange transition-colors">
+                        Délais de livraison ?
+                        <span class="transition-transform group-open:rotate-180"><i
+                                class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <div class="p-5 pt-0 text-gray-400 text-sm border-t border-gray-700 mt-2">
+                        Généralement entre 1 à 3 jours ouvrables selon votre wilaya.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800 text-gray-400 pt-16 pb-8 reveal">
+        <div class="container mx-auto px-4 flex flex-col items-center text-center gap-8 mb-8">
+            <div class="flex flex-col items-center">
+                <div class="flex flex-col items-center gap-2 mb-4">
+                    <img src="public/photos/Season-Deals_Dz.png"
+                        class="h-24 w-24 rounded-full object-cover border-2 border-brand-orange"
+                        onerror="this.style.display='none'">
+                    <span class="text-white font-bold text-sm tracking-widest mt-2">SEASON DEALS</span>
+                </div>
+                <p class="text-sm max-w-md">Votre destination pour les meilleurs produits de saison en Algérie.</p>
+                <div class="flex gap-4 mt-6 justify-center">
+                    <a href="#"
+                        class="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all transform hover:scale-110">
+                        <i class="fa-brands fa-facebook-f text-lg"></i>
+                    </a>
+                    <a href="#"
+                        class="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-red-500 hover:to-purple-500 hover:text-white transition-all transform hover:scale-110">
+                        <i class="fa-brands fa-instagram text-lg"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-8 w-full border-t border-gray-800 pt-8 mt-4">
+                <div>
+                    <h4 class="text-white font-bold mb-4 text-sm uppercase">Liens Rapides</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-brand-orange">Accueil</a></li>
+                        <li><a href="#products-container" class="hover:text-brand-orange">Produits</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 text-sm uppercase">Localisation</h4>
+                    <p class="text-sm"><i class="fa-solid fa-map-pin text-brand-orange mr-2"></i> Livraison sur 58
+                        Wilayas</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-sm border-t border-gray-900 pt-8">
+            © 2026 Season Deals. Tous droits réservés.
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="hidden fixed inset-0 z-[60]">
+        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" onclick="toggleCart()"></div>
+        <div
+            class="absolute right-0 top-0 h-full w-full max-w-md bg-gray-900 shadow-xl border-l border-gray-800 flex flex-col transform transition-transform">
+            <div class="p-4 border-b border-gray-800 flex justify-between items-center text-white">
+                <h2 class="text-lg font-bold flex items-center gap-2"><i
+                        class="fa-solid fa-bag-shopping text-brand-orange"></i> Mon Panier</h2>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-white"><i
+                        class="fa-solid fa-times text-xl"></i></button>
+            </div>
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 space-y-4">
+                <!-- Items injected here -->
+            </div>
+            <div class="p-4 bg-gray-800 border-t border-gray-700">
+                <div class="flex justify-between text-white font-bold mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total-display">0 DA</span>
+                </div>
+                <button onclick="checkoutCart(); toggleCart()"
+                    class="w-full bg-gradient-to-r from-brand-orange to-brand-gold text-white font-bold py-3 rounded-lg hover:opacity-90 transition">
+                    Commander Tout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div id="product-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/90 backdrop-blur-sm" onclick="closeProductModal()"></div>
+        <div
+            class="relative bg-gray-800 w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-700">
+            <button onclick="closeProductModal()"
+                class="absolute top-4 right-4 z-20 bg-gray-900/50 p-2 rounded-full text-white hover:bg-gray-700"><i
+                    class="fa-solid fa-times"></i></button>
+            <div class="md:w-1/2 bg-gray-900 p-8 flex items-center justify-center">
+                <img id="modal-img" src="" class="max-h-[300px] object-contain">
+            </div>
+            <div class="md:w-1/2 p-8 flex flex-col text-white">
+                <span id="modal-cat" class="text-brand-orange text-xs font-bold uppercase mb-2"></span>
+                <h2 id="modal-title" class="text-3xl font-bold mb-4"></h2>
+                <p id="modal-desc" class="text-gray-400 text-sm mb-6 flex-1"></p>
+                <div class="mt-auto">
+                    <div id="modal-price" class="text-3xl font-bold mb-6 text-white"></div>
+                    <div class="flex gap-4">
+                        <button id="modal-add-btn"
+                            class="flex-1 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-bold border border-gray-600">Ajouter</button>
+                        <button id="modal-buy-btn"
+                            class="flex-[1.5] bg-gradient-to-r from-brand-orange to-brand-gold py-3 rounded-xl font-bold text-white shadow-lg">Acheter
+                            Maintenant</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal (Order Form) -->
+    <div id="checkout-modal" class="hidden fixed inset-0 z-[70] overflow-y-auto">
+        <div class="flex min-h-screen items-center justify-center p-4">
+            <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm" onclick="closeCheckout()"></div>
+            <div
+                class="relative bg-gray-800 w-full max-w-lg rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
+                <div class="bg-gray-900 px-6 py-4 border-b border-gray-700 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2"><i
+                            class="fa-solid fa-truck text-brand-orange"></i> Passer une Commande</h3>
+                    <button onclick="closeCheckout()" class="text-gray-400 hover:text-white"><i
+                            class="fa-solid fa-times"></i></button>
+                </div>
+
+                <form id="orderForm" action="https://hook.eu2.make.com/s0fln9fki3odgir6rb2myb4okp4mcqwc" method="POST"
+                    class="p-6 space-y-4">
+                    <input type="hidden" name="total_price" id="input-total-price">
+                    <input type="hidden" name="shipping_price" id="input-shipping-price">
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Commande</label>
+                        <input type="text" name="produit" id="product-summary-input" readonly
+                            class="w-full bg-gray-900 border border-gray-700 rounded-lg py-2 px-3 text-white text-sm focus:border-brand-orange outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Nom Complet *</label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="Entrez votre nom complet"
+                            class="w-full bg-gray-900 border border-gray-700 rounded-lg py-3 px-3 text-white focus:border-brand-orange outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Opérateur</label>
+                            <select id="operator" name="operator"
+                                class="w-full bg-gray-900 border border-gray-700 rounded-lg py-3 px-2 text-white text-sm">
+                                <option value="06">Mobilis</option>
+                                <option value="05">Djezzy</option>
+                                <option value="07">Ooredoo</option>
+                            </select>
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Téléphone *</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="Numéro (sans le 0 au début)"
+                                class="w-full bg-gray-900 border border-gray-700 rounded-lg py-3 px-3 text-white focus:border-brand-orange outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Wilaya *</label>
+                            <select id="wilaya" name="wilaya" required
+                                class="w-full bg-gray-900 border border-gray-700 rounded-lg py-3 px-2 text-white text-sm">
+                                <option value="">Sélectionnez votre wilaya</option>
+                                <option value="1">01 - Adrar</option>
+                                <option value="2">02 - Chlef</option>
+                                <option value="3">03 - Laghouat</option>
+                                <option value="4">04 - Oum El Bouaghi</option>
+                                <option value="5">05 - Batna</option>
+                                <option value="6">06 - Béjaïa</option>
+                                <option value="7">07 - Biskra</option>
+                                <option value="8">08 - Béchar</option>
+                                <option value="9">09 - Blida</option>
+                                <option value="10">10 - Bouira</option>
+                                <option value="11">11 - Tamanrasset</option>
+                                <option value="12">12 - Tébessa</option>
+                                <option value="13">13 - Tlemcen</option>
+                                <option value="14">14 - Tiaret</option>
+                                <option value="15">15 - Tizi Ouzou</option>
+                                <option value="16">16 - Alger</option>
+                                <option value="17">17 - Djelfa</option>
+                                <option value="18">18 - Jijel</option>
+                                <option value="19">19 - Sétif</option>
+                                <option value="20">20 - Saïda</option>
+                                <option value="21">21 - Skikda</option>
+                                <option value="22">22 - Sidi Bel Abbès</option>
+                                <option value="23">23 - Annaba</option>
+                                <option value="24">24 - Guelma</option>
+                                <option value="25">25 - Constantine</option>
+                                <option value="26">26 - Médéa</option>
+                                <option value="27">27 - Mostaganem</option>
+                                <option value="28">28 - M'Sila</option>
+                                <option value="29">29 - Mascara</option>
+                                <option value="30">30 - Ouargla</option>
+                                <option value="31">31 - Oran</option>
+                                <option value="32">32 - El Bayadh</option>
+                                <option value="33">33 - Illizi</option>
+                                <option value="34">34 - Bordj Bou Arréridj</option>
+                                <option value="35">35 - Boumerdès</option>
+                                <option value="36">36 - El Tarf</option>
+                                <option value="37">37 - Tindouf</option>
+                                <option value="38">38 - Tissemsilt</option>
+                                <option value="39">39 - El Oued</option>
+                                <option value="40">40 - Khenchela</option>
+                                <option value="41">41 - Souk Ahras</option>
+                                <option value="42">42 - Tipaza</option>
+                                <option value="43">43 - Mila</option>
+                                <option value="44">44 - Aïn Defla</option>
+                                <option value="45">45 - Naâma</option>
+                                <option value="46">46 - Aïn Témouchent</option>
+                                <option value="47">47 - Ghardaïa</option>
+                                <option value="48">48 - Relizane</option>
+                                <option value="49">49 - Timimoun</option>
+                                <option value="50">50 - Bordj Badji Mokhtar</option>
+                                <option value="51">51 - Ouled Djellal</option>
+                                <option value="52">52 - Béni Abbès</option>
+                                <option value="53">53 - In Salah</option>
+                                <option value="54">54 - In Guezzam</option>
+                                <option value="55">55 - Touggourt</option>
+                                <option value="56">56 - Djanet</option>
+                                <option value="57">57 - El M'Ghair</option>
+                                <option value="58">58 - El Meniaa</option>
+                            </select>
+                        </div>
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Commune</label>
+                            <input type="text" id="commune-search" placeholder="Chercher une commune..."
+                                class="w-full bg-gray-900 border border-gray-700 rounded-lg py-3 px-3 text-white focus:border-brand-orange outline-none"
+                                disabled>
+                            <div id="commune-dropdown"
+                                class="absolute z-50 w-full bg-gray-800 border border-gray-700 rounded-b-lg max-h-48 overflow-y-auto hidden shadow-xl">
+                            </div>
+                            <input type="hidden" id="commune" name="commune">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-400">Mode de Livraison</label>
+                        <div class="flex gap-4">
+                            <label
+                                class="flex-1 border border-gray-700 p-3 rounded-lg cursor-pointer hover:bg-gray-700 transition flex justify-between items-center group">
+                                <div class="flex items-center gap-2">
+                                    <input type="radio" name="delivery" value="domicile" id="delivery-home" checked
+                                        class="accent-brand-orange">
+                                    <span class="text-sm text-white">Domicile</span>
+                                </div>
+                                <span id="fee-home-display" class="text-xs font-bold text-brand-orange">-- DA</span>
+                            </label>
+                            <label
+                                class="flex-1 border border-gray-700 p-3 rounded-lg cursor-pointer hover:bg-gray-700 transition flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <input type="radio" name="delivery" value="yalidine" id="delivery-desk"
+                                        class="accent-brand-orange">
+                                    <span class="text-sm text-white">Bureau</span>
+                                </div>
+                                <span id="fee-desk-display" class="text-xs font-bold text-brand-orange">-- DA</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900 p-4 rounded-lg border border-gray-700 mt-4">
+                        <div class="flex justify-between text-gray-400 text-sm mb-1">
+                            <span>Livraison:</span>
+                            <span id="shipping-cost">--</span>
+                        </div>
+                        <div
+                            class="flex justify-between text-white font-bold text-lg border-t border-gray-700 pt-2 mt-1">
+                            <span>Total à Payer:</span>
+                            <span id="final-total" class="text-brand-orange">0 DA</span>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-4 rounded-lg shadow-lg flex items-center justify-center gap-2 transition transform hover:-translate-y-1">
+                        <i class="fa-solid fa-check-circle"></i> Confirmer la Commande
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="fixed bottom-4 right-4 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-[80] border border-gray-700 flex items-center gap-3">
+        <i class="fa-solid fa-info-circle text-brand-orange"></i>
+        <span>Notification</span>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
