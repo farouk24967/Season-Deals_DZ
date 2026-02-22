@@ -12,8 +12,6 @@ const PRODUCTS = [
     category: "ete",
     image: "public/produit/Été/casquette-Vt-cnc.jpg",
     video: "public/produit/videos/Blue and Yellow Modern Business Service Promotion Mobile Video.mp4",
-    rating: 4.9,
-    reviews: 124,
     isNew: true,
     description: "L'été ne sera plus un problème avec notre climatiseur portable USB nouvelle génération. Technologie de refroidissement par hydro-chill, ultra-silencieux et extrêmement économe. Parfait pour vos nuits d'été ou vos journées de bureau."
   },
@@ -26,7 +24,6 @@ const PRODUCTS = [
     image: "public/photos/robot.jpg",
     video: "public/produit/videos/Blue and Yellow Modern Business Service Promotion Mobile Video.mp4",
     rating: 4.8,
-    reviews: 56,
     description: "Le futur du nettoyage est ici. Ce robot 3-en-1 balaie, aspire et lave vos sols en toute autonomie. Navigation intelligente, capteurs d'obstacles et retour automatique à sa station de charge. Contrôlez-le depuis votre canapé."
   },
   {
@@ -38,7 +35,6 @@ const PRODUCTS = [
     image: "public/photos/mixeur.jpg",
     video: "public/produit/videos/Blue and Yellow Modern Business Service Promotion Mobile Video.mp4",
     rating: 4.7,
-    reviews: 189,
     description: "Emportez vos vitamines partout ! Ce mixeur portable puissant vous permet de réaliser des smoothies, shakes et jus de fruits frais en quelques secondes. Rechargeable par USB, il est le compagnon idéal de vos sorties sportives."
   }
 ];
