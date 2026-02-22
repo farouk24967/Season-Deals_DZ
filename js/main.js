@@ -573,54 +573,47 @@ function renderProducts() {
     const discount = product.originalPrice ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
 
     const card = document.createElement('div');
-    card.className = "group bg-gray-900 border border-gray-800 rounded-[1.5rem] overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-brand-orange/10 hover:scale-[1.02] hover:border-gray-700 transition-all duration-300 flex flex-col";
+    card.className = "group bg-gray-900 border border-gray-800 rounded-2xl sm:rounded-[1.5rem] overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-brand-orange/10 transition-all duration-300 flex flex-col";
     card.innerHTML = `
-      <div class="relative h-56 sm:h-64 overflow-hidden bg-gray-800 flex items-center justify-center p-6 cursor-pointer" onclick="openProductModal(${product.id})">
+      <div class="relative h-40 sm:h-64 overflow-hidden bg-gray-800 flex items-center justify-center p-4 sm:p-6 cursor-pointer" onclick="openProductModal(${product.id})">
         <div class="absolute inset-0 bg-gradient-to-br from-brand-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
         
-        ${product.isNew ? '<span class="absolute top-4 left-4 z-20 bg-brand-gold text-brand-dark text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Nouveau</span>' : ''}
-        ${discount > 0 ? `<span class="absolute top-4 right-4 z-20 bg-red-600 text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg">-${discount}%</span>` : ''}
+        ${product.isNew ? '<span class="absolute top-2 left-2 sm:top-4 sm:left-4 z-20 bg-brand-gold text-brand-dark text-[7px] sm:text-[9px] font-black px-2 py-1 sm:px-3 sm:py-1.5 rounded-full uppercase tracking-widest shadow-lg">Nouveau</span>' : ''}
+        ${discount > 0 ? `<span class="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 bg-red-600 text-white text-[7px] sm:text-[9px] font-black px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-lg">-${discount}%</span>` : ''}
         
-        <img src="${product.image}" alt="${product.title}" onerror="this.src='https://placehold.co/400x400/1f2937/FFF?text=Image+Non+Dispo'" class="max-h-[85%] max-w-[85%] object-contain transform group-hover:scale-110 group-hover:-rotate-2 transition-all duration-700 drop-shadow-2xl z-0">
+        <img src="${product.image}" alt="${product.title}" onerror="this.src='https://placehold.co/400x400/1f2937/FFF?text=Image+Non+Dispo'" class="max-h-[90%] max-w-[90%] object-contain transform group-hover:scale-110 transition-all duration-700 drop-shadow-2xl z-0">
         
         <!-- Hover Overlay with Play Icon if Video exists -->
         ${product.video ? `
         <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-          <div class="h-16 w-16 bg-brand-orange/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 scale-50 group-hover:scale-100 transition-transform duration-500">
-            <i class="fa-solid fa-play text-white text-2xl ml-1"></i>
+          <div class="h-10 w-10 sm:h-16 sm:w-16 bg-brand-orange/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 scale-50 group-hover:scale-100 transition-transform duration-500">
+            <i class="fa-solid fa-play text-white text-sm sm:text-2xl ml-1"></i>
           </div>
         </div>` : ''}
 
-        <!-- Video Badge on Card -->
-        ${product.video ? `
-        <div class="absolute bottom-4 left-4 z-30 flex items-center gap-2 bg-gray-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-[8px] font-black text-white uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 shadow-xl">
-          <span class="flex h-1.5 w-1.5 rounded-full bg-brand-orange animate-pulse"></span>
-          Vidéo disponible
-        </div>` : ''}
-
-        <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" class="absolute bottom-4 right-4 z-10 p-2.5 rounded-full backdrop-blur-md transition-all transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 ${isFav ? 'text-red-500 bg-red-500/20' : 'text-gray-300 bg-gray-900/80 hover:text-red-500 shadow-xl'}">
-          <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+        <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" class="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 z-10 p-2 sm:p-2.5 rounded-full backdrop-blur-md transition-all ${isFav ? 'text-red-500 bg-red-500/20' : 'text-gray-300 bg-gray-900/80 hover:text-red-500 shadow-xl'}">
+          <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart text-xs sm:text-base"></i>
         </button>
       </div>
 
-      <div class="p-6 flex flex-col flex-1">
-        <div class="mb-3">
-          <span class="text-[9px] uppercase font-black text-brand-orange bg-brand-orange/10 px-3 py-1 rounded-full tracking-widest">${product.category}</span>
+      <div class="p-3 sm:p-6 flex flex-col flex-1">
+        <div class="mb-2">
+          <span class="text-[7px] sm:text-[9px] uppercase font-black text-brand-orange bg-brand-orange/10 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full tracking-widest">${product.category}</span>
         </div>
-        <h3 class="text-gray-100 font-bold text-base sm:text-lg leading-snug mb-4 line-clamp-2 flex-1 group-hover:text-brand-orange transition-colors tracking-tight">${product.title}</h3>
+        <h3 class="text-gray-100 font-bold text-xs sm:text-lg leading-tight sm:leading-snug mb-3 sm:mb-4 line-clamp-2 flex-1 group-hover:text-brand-orange transition-colors tracking-tight">${product.title}</h3>
         
-        <div class="mt-auto pt-5 border-t border-gray-800">
-          <div class="flex items-end gap-2 mb-4">
-             <span class="text-2xl font-black text-white tracking-tighter">${product.price.toLocaleString('fr-FR')} <span class="text-brand-orange text-xs">DA</span></span>
-             ${product.originalPrice ? `<span class="text-xs text-gray-500 line-through mb-1.5 font-medium">${product.originalPrice.toLocaleString('fr-FR')} DA</span>` : ''}
+        <div class="mt-auto pt-3 sm:pt-5 border-t border-gray-800">
+          <div class="flex items-center sm:items-end gap-1 sm:gap-2 mb-3 sm:mb-4">
+             <span class="text-sm sm:text-2xl font-black text-white tracking-tighter">${product.price.toLocaleString('fr-FR')} <span class="text-brand-orange text-[8px] sm:text-xs">DA</span></span>
+             ${product.originalPrice ? `<span class="text-[9px] sm:text-xs text-gray-500 line-through mb-0.5 sm:mb-1.5 font-medium">${product.originalPrice.toLocaleString('fr-FR')} DA</span>` : ''}
           </div>
 
-          <div class="flex gap-2 text-xs">
-            <button onclick="addToCart(${product.id})" class="flex-1 flex items-center justify-center space-x-2 bg-gray-800 hover:bg-gray-700 text-gray-300 py-3.5 rounded-xl transition-all border border-gray-700 active:scale-95 font-bold">
-                <i class="fa-solid fa-cart-plus"></i> <span class="hidden sm:inline">Panier</span>
+          <div class="flex gap-1.5 sm:gap-2">
+            <button onclick="addToCart(${product.id})" class="flex-1 flex items-center justify-center bg-gray-800 hover:bg-gray-700 text-gray-300 py-2 sm:py-3.5 rounded-lg sm:rounded-xl transition-all border border-gray-700 active:scale-95">
+                <i class="fa-solid fa-cart-plus text-xs sm:text-base"></i>
             </button>
-            <button onclick="buyNow(${product.id})" class="flex-[2] flex items-center justify-center space-x-2 bg-gradient-to-r from-brand-orange to-brand-gold text-white py-3.5 rounded-xl transition-all shadow-lg hover:shadow-brand-orange/30 font-black tracking-wider active:scale-95">
-                <i class="fa-solid fa-bolt"></i> <span>ACHETER</span>
+            <button onclick="buyNow(${product.id})" class="flex-[2] flex items-center justify-center bg-gradient-to-r from-brand-orange to-brand-gold text-white py-2 sm:py-3.5 rounded-lg sm:rounded-xl transition-all shadow-lg font-bold sm:font-black text-[10px] sm:text-xs tracking-wider active:scale-95">
+                <span>ACHETER</span>
             </button>
           </div>
         </div>
@@ -684,24 +677,24 @@ function renderCarousel() {
 
   featured.forEach((product, idx) => {
     const slide = document.createElement('div');
-    slide.className = "min-w-full h-full relative flex items-center justify-center p-8 gap-8 transition-opacity duration-500";
+    slide.className = "min-w-full h-full relative flex items-center justify-center p-4 sm:p-8 transition-opacity duration-500";
     slide.innerHTML = `
       <div class="absolute inset-0 bg-gray-900 z-0">
          <img src="${product.image}" class="w-full h-full object-cover opacity-20 blur-xl scale-110">
       </div>
-      <div class="relative z-10 w-full max-w-5xl flex flex-col md:flex-row items-center justify-center h-full gap-8">
-          <div class="w-1/2 flex justify-center">
-              <img src="${product.image}" class="max-h-[250px] md:max-h-[350px] object-contain drop-shadow-2xl transform hover:scale-105 transition-transform duration-500">
+      <div class="relative z-10 w-full max-w-5xl flex flex-row items-center justify-center h-full gap-4 sm:gap-8">
+          <div class="w-2/5 sm:w-1/2 flex justify-center">
+              <img src="${product.image}" class="max-h-[150px] sm:max-h-[250px] md:max-h-[350px] object-contain drop-shadow-2xl transform hover:scale-105 transition-transform duration-500">
           </div>
-          <div class="w-1/2 text-left space-y-4">
-              <span class="bg-brand-orange text-white px-3 py-1 rounded-full text-xs font-bold uppercase">En Vedette</span>
-              <h2 class="text-3xl md:text-5xl font-bold text-white leading-tight">${product.title}</h2>
-              <div class="flex items-center gap-4 pt-2">
-                  <span class="text-3xl font-bold text-brand-gold">${product.price} DA</span>
-                  ${product.originalPrice ? `<span class="text-lg text-gray-500 line-through">${product.originalPrice} DA</span>` : ''}
+          <div class="w-3/5 sm:w-1/2 text-left space-y-2 sm:space-y-4">
+              <span class="bg-brand-orange text-white px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[8px] sm:text-xs font-bold uppercase">En Vedette</span>
+              <h2 class="text-lg sm:text-3xl md:text-5xl font-bold text-white leading-tight line-clamp-2">${product.title}</h2>
+              <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 pt-1 sm:pt-2">
+                  <span class="text-base sm:text-3xl font-bold text-brand-gold">${product.price} DA</span>
+                  ${product.originalPrice ? `<span class="text-[10px] sm:text-lg text-gray-500 line-through">${product.originalPrice} DA</span>` : ''}
               </div>
-              <button onclick="buyNow(${product.id})" class="mt-4 bg-white text-gray-900 hover:bg-brand-gold font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg">
-                  Commander Maintenant
+              <button onclick="buyNow(${product.id})" class="mt-2 sm:mt-4 bg-white text-gray-900 hover:bg-brand-gold font-bold py-2 px-4 sm:py-3 sm:px-8 rounded-full transition transform hover:scale-105 shadow-lg text-xs sm:text-base">
+                  Acheter
               </button>
           </div>
       </div>
