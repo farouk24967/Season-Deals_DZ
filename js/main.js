@@ -4,11 +4,43 @@ const WEBHOOK_URL = "https://hook.eu2.make.com/s0fln9fki3odgir6rb2myb4okp4mcqwc"
 
 // DONNÉES PRODUITS
 const PRODUCTS = [
-  { id: 1, title: "Climatiseur Portable", price: 5500, originalPrice: 7900, category: "hiver", image: "public/produit/Été/casquette-Vt-cnc.jpg", rating: 4.6, reviews: 84, isNew: true, description: "Restez au frais cet été avec notre climatiseur portable USB. Compact, silencieux et économe en énergie, il refroidit votre espace personnel en quelques minutes. Idéal pour le bureau, la chambre ou le camping." },
-  { id: 2, title: "Robot Aspirateur Intelligent 3-en-1", price: 28000, originalPrice: 35000, category: "maison", image: "public/photos/robot.jpg", rating: 4.8, reviews: 42, description: "Simplifiez votre ménage avec ce robot aspirateur intelligent. Il aspire, balaie et nettoie vos sols automatiquement. Doté de capteurs anti-chute et d'une autonomie de 2h." },
-  { id: 3, title: "Mini Mixeur Portable", price: 2900, originalPrice: 4500, category: "ete", image: "public/photos/mixeur.jpg", rating: 4.5, reviews: 156, description: "Préparez des smoothies frais n'importe où avec ce mini mixeur portable. Rechargeable via USB, puissant et facile à nettoyer, il vous accompagne au sport, au travail ou en voyage." },
-  { id: 4, title: "Gilet Chauffant Intelligent", price: 4800, category: "cuisine", image: "public/photos/gilet.jpg", rating: 4.7, reviews: 23, description: "Affrontez le froid avec style grâce à ce gilet chauffant intelligent. Trois niveaux de température réglables, alimenté par USB (batterie externe non incluse). Léger et confortable." },
-
+  {
+    id: 1,
+    title: "Climatiseur Portable Powerful Cool",
+    price: 5500,
+    originalPrice: 7900,
+    category: "ete",
+    image: "public/produit/Été/casquette-Vt-cnc.jpg",
+    video: "public/produit/videos/Blue and Yellow Modern Business Service Promotion Mobile Video.mp4",
+    rating: 4.9,
+    reviews: 124,
+    isNew: true,
+    description: "L'été ne sera plus un problème avec notre climatiseur portable USB nouvelle génération. Technologie de refroidissement par hydro-chill, ultra-silencieux et extrêmement économe. Parfait pour vos nuits d'été ou vos journées de bureau."
+  },
+  {
+    id: 2,
+    title: "Robot Aspirateur Smart Clean Pro",
+    price: 28000,
+    originalPrice: 35000,
+    category: "maison",
+    image: "public/photos/robot.jpg",
+    video: "public/produit/videos/Blue and Yellow Modern Business Service Promotion Mobile Video.mp4",
+    rating: 4.8,
+    reviews: 56,
+    description: "Le futur du nettoyage est ici. Ce robot 3-en-1 balaie, aspire et lave vos sols en toute autonomie. Navigation intelligente, capteurs d'obstacles et retour automatique à sa station de charge. Contrôlez-le depuis votre canapé."
+  },
+  {
+    id: 3,
+    title: "Mini Mixeur Fresh-Go USB",
+    price: 2900,
+    originalPrice: 4500,
+    category: "ete",
+    image: "public/photos/mixeur.jpg",
+    video: "public/produit/videos/Blue and Yellow Modern Business Service Promotion Mobile Video.mp4",
+    rating: 4.7,
+    reviews: 189,
+    description: "Emportez vos vitamines partout ! Ce mixeur portable puissant vous permet de réaliser des smoothies, shakes et jus de fruits frais en quelques secondes. Rechargeable par USB, il est le compagnon idéal de vos sorties sportives."
+  }
 ];
 
 const CATEGORIES = [
@@ -545,37 +577,54 @@ function renderProducts() {
     const discount = product.originalPrice ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
 
     const card = document.createElement('div');
-    card.className = "group bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-brand-orange/20 hover:scale-[1.02] hover:border-gray-600 transition-all duration-300 flex flex-col";
+    card.className = "group bg-gray-900 border border-gray-800 rounded-[1.5rem] overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-brand-orange/10 hover:scale-[1.02] hover:border-gray-700 transition-all duration-300 flex flex-col";
     card.innerHTML = `
-      <div class="relative h-48 sm:h-56 overflow-hidden bg-gray-800 p-4 cursor-pointer" onclick="openProductModal(${product.id})">
-        ${product.isNew ? '<span class="absolute top-3 left-3 z-10 bg-brand-gold text-brand-dark text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Nouveau</span>' : ''}
-        ${discount > 0 ? `<span class="absolute top-3 right-3 z-10 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">-${discount}%</span>` : ''}
+      <div class="relative h-56 sm:h-64 overflow-hidden bg-gray-800 flex items-center justify-center p-6 cursor-pointer" onclick="openProductModal(${product.id})">
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-orange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
         
-        <img src="${product.image}" alt="${product.title}" onerror="this.src='https://placehold.co/400x400/1f2937/FFF?text=Image+Non+Dispo'" class="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-500">
+        ${product.isNew ? '<span class="absolute top-4 left-4 z-20 bg-brand-gold text-brand-dark text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Nouveau</span>' : ''}
+        ${discount > 0 ? `<span class="absolute top-4 right-4 z-20 bg-red-600 text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg">-${discount}%</span>` : ''}
         
-        <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" class="absolute bottom-3 right-3 z-10 p-2 rounded-full backdrop-blur-sm transition-all transform translate-y-2 group-hover:translate-y-0 ${isFav ? 'text-red-500 bg-red-500/20' : 'text-gray-400 bg-gray-900/80 hover:text-red-500'}">
+        <img src="${product.image}" alt="${product.title}" onerror="this.src='https://placehold.co/400x400/1f2937/FFF?text=Image+Non+Dispo'" class="max-h-[85%] max-w-[85%] object-contain transform group-hover:scale-110 group-hover:-rotate-2 transition-all duration-700 drop-shadow-2xl z-0">
+        
+        <!-- Hover Overlay with Play Icon if Video exists -->
+        ${product.video ? `
+        <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+          <div class="h-16 w-16 bg-brand-orange/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 scale-50 group-hover:scale-100 transition-transform duration-500">
+            <i class="fa-solid fa-play text-white text-2xl ml-1"></i>
+          </div>
+        </div>` : ''}
+
+        <!-- Video Badge on Card -->
+        ${product.video ? `
+        <div class="absolute bottom-4 left-4 z-30 flex items-center gap-2 bg-gray-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-[8px] font-black text-white uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0 shadow-xl">
+          <span class="flex h-1.5 w-1.5 rounded-full bg-brand-orange animate-pulse"></span>
+          Vidéo disponible
+        </div>` : ''}
+
+        <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" class="absolute bottom-4 right-4 z-10 p-2.5 rounded-full backdrop-blur-md transition-all transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 ${isFav ? 'text-red-500 bg-red-500/20' : 'text-gray-300 bg-gray-900/80 hover:text-red-500 shadow-xl'}">
           <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
         </button>
       </div>
 
-      <div class="p-4 flex flex-col flex-1">
-        <div class="mb-2">
-          <span class="text-[10px] uppercase font-bold text-brand-orange bg-brand-orange/10 px-2 py-0.5 rounded">${product.category}</span>
+      <div class="p-6 flex flex-col flex-1">
+        <div class="mb-3">
+          <span class="text-[9px] uppercase font-black text-brand-orange bg-brand-orange/10 px-3 py-1 rounded-full tracking-widest">${product.category}</span>
         </div>
-        <h3 class="text-gray-100 font-medium text-sm sm:text-base leading-snug mb-3 line-clamp-2 flex-1 group-hover:text-brand-gold transition-colors">${product.title}</h3>
+        <h3 class="text-gray-100 font-bold text-base sm:text-lg leading-snug mb-4 line-clamp-2 flex-1 group-hover:text-brand-orange transition-colors tracking-tight">${product.title}</h3>
         
-        <div class="mt-auto pt-4 border-t border-gray-800">
-          <div class="flex flex-col mb-3">
-             ${product.originalPrice ? `<span class="text-xs text-gray-500 line-through mb-1">${product.originalPrice} DA</span>` : ''}
-             <span class="text-lg sm:text-xl font-bold text-white">${product.price} <span class="text-brand-orange text-sm">DA</span></span>
+        <div class="mt-auto pt-5 border-t border-gray-800">
+          <div class="flex items-end gap-2 mb-4">
+             <span class="text-2xl font-black text-white tracking-tighter">${product.price.toLocaleString('fr-FR')} <span class="text-brand-orange text-xs">DA</span></span>
+             ${product.originalPrice ? `<span class="text-xs text-gray-500 line-through mb-1.5 font-medium">${product.originalPrice.toLocaleString('fr-FR')} DA</span>` : ''}
           </div>
 
-          <div class="flex gap-2">
-            <button onclick="addToCart(${product.id})" class="flex-1 flex items-center justify-center space-x-2 bg-gray-800 hover:bg-gray-700 text-gray-300 py-2.5 rounded-lg transition-all border border-gray-700 hover:border-gray-600">
-                <i class="fa-solid fa-cart-plus"></i> <span class="hidden sm:inline">Ajouter</span>
+          <div class="flex gap-2 text-xs">
+            <button onclick="addToCart(${product.id})" class="flex-1 flex items-center justify-center space-x-2 bg-gray-800 hover:bg-gray-700 text-gray-300 py-3.5 rounded-xl transition-all border border-gray-700 active:scale-95 font-bold">
+                <i class="fa-solid fa-cart-plus"></i> <span class="hidden sm:inline">Panier</span>
             </button>
-            <button onclick="buyNow(${product.id})" class="flex-[1.5] flex items-center justify-center space-x-2 bg-gradient-to-r from-brand-orange to-brand-gold text-white py-2.5 rounded-lg transition-all shadow-lg hover:shadow-brand-orange/40 hover:-translate-y-0.5 font-bold">
-                <i class="fa-solid fa-bolt"></i> <span>Acheter</span>
+            <button onclick="buyNow(${product.id})" class="flex-[2] flex items-center justify-center space-x-2 bg-gradient-to-r from-brand-orange to-brand-gold text-white py-3.5 rounded-xl transition-all shadow-lg hover:shadow-brand-orange/30 font-black tracking-wider active:scale-95">
+                <i class="fa-solid fa-bolt"></i> <span>ACHETER</span>
             </button>
           </div>
         </div>
@@ -588,7 +637,9 @@ function renderProducts() {
 // LOGIC: SIDEBAR FILTERS
 function renderSidebar() {
   const list = document.getElementById('category-list');
-  list.innerHTML = '';
+  const mobileList = document.getElementById('mobile-category-list');
+  if (list) list.innerHTML = '';
+  if (mobileList) mobileList.innerHTML = '';
 
   // Calculate counts
   const counts = {};
@@ -598,15 +649,28 @@ function renderSidebar() {
   });
 
   CATEGORIES.forEach(cat => {
-    const li = document.createElement('li');
-    const isActive = state.filters.category === cat.id;
-    li.innerHTML = `
-      <button onclick="setCategory('${cat.id}')" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-all ${isActive ? 'bg-brand-orange text-white font-medium shadow-md' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}">
-        <span>${cat.name}</span>
-        ${!isActive ? `<span class="text-xs bg-gray-800 text-gray-500 px-2 py-0.5 rounded-full">${counts[cat.id] || 0}</span>` : ''}
-      </button>
-    `;
-    list.appendChild(li);
+    // Desktop Sidebar
+    if (list) {
+      const li = document.createElement('li');
+      const isActive = state.filters.category === cat.id;
+      li.innerHTML = `
+        <button onclick="setCategory('${cat.id}')" class="w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-all ${isActive ? 'bg-brand-orange text-white font-medium shadow-md' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}">
+          <span>${cat.name}</span>
+          ${!isActive ? `<span class="text-xs bg-gray-800 text-gray-500 px-2 py-0.5 rounded-full">${counts[cat.id] || 0}</span>` : ''}
+        </button>
+      `;
+      list.appendChild(li);
+    }
+
+    // Mobile Menu Grid
+    if (mobileList) {
+      const btn = document.createElement('button');
+      const isActive = state.filters.category === cat.id;
+      btn.onclick = () => { setCategory(cat.id); toggleMobileMenu(); };
+      btn.className = `p-3 rounded-xl text-xs font-bold transition-all border ${isActive ? 'bg-brand-orange text-white border-brand-orange shadow-lg' : 'bg-gray-800 text-gray-400 border-gray-700'}`;
+      btn.innerHTML = `<span>${cat.name}</span>`;
+      mobileList.appendChild(btn);
+    }
   });
 }
 
@@ -804,29 +868,124 @@ function toggleCart() {
   dom.cartModal.classList.toggle('hidden');
 }
 
+// MODAL LOGIC (IMPROVED)
 function openProductModal(id) {
   const product = PRODUCTS.find(p => p.id === id);
   const modal = dom.productModal;
+  state.activeProduct = product;
 
+  // Set Content
   document.getElementById('modal-img').src = product.image;
   document.getElementById('modal-title').textContent = product.title;
   document.getElementById('modal-desc').textContent = product.description;
   document.getElementById('modal-price').textContent = product.price.toLocaleString('fr-FR') + ' DA';
   document.getElementById('modal-cat').textContent = product.category;
 
-  // Set onclick for buttons inside modal
-  document.getElementById('modal-add-btn').onclick = () => { addToCart(product.id); modal.classList.add('hidden'); };
-  document.getElementById('modal-buy-btn').onclick = () => { modal.classList.add('hidden'); buyNow(product.id); };
+  // Rating/Reviews
+  document.getElementById('modal-reviews').textContent = product.reviews || '84';
+
+  // Original Price handling
+  const origPriceDisplay = document.getElementById('modal-original-price');
+  if (product.originalPrice) {
+    origPriceDisplay.textContent = product.originalPrice.toLocaleString('fr-FR') + ' DA';
+    origPriceDisplay.classList.remove('hidden');
+  } else {
+    origPriceDisplay.classList.add('hidden');
+  }
+
+  // Tags
+  document.getElementById('modal-new-tag').classList.toggle('hidden', !product.isNew);
+
+  // Video Setup
+  const videoBtn = document.getElementById('video-toggle-btn');
+  const modalVideo = document.getElementById('modal-video');
+  const videoContainer = document.getElementById('modal-video-container');
+  const videoBadge = document.getElementById('modal-video-badge');
+
+  if (product.video) {
+    videoBtn.classList.remove('hidden');
+    videoBadge.classList.remove('hidden');
+    modalVideo.querySelector('source').src = product.video;
+    modalVideo.load();
+  } else {
+    videoBtn.classList.add('hidden');
+    videoBadge.classList.add('hidden');
+  }
+
+  // Reset media view (show image by default)
+  videoContainer.classList.add('hidden');
+  document.getElementById('modal-img').classList.remove('opacity-0');
+  videoBtn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Voir la Vidéo</span>';
+
+  // Buttons Action
+  document.getElementById('modal-add-btn').onclick = () => {
+    addToCart(product.id);
+    // Optionnel: ne pas fermer le modal pour laisser l'utilisateur continuer à lire
+    showToast("Ajouté au panier !");
+  };
+
+  document.getElementById('modal-buy-btn').onclick = () => {
+    closeProductModal();
+    buyNow(product.id);
+  };
 
   modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden'; // Prevents scrolling behind modal
+}
+
+function toggleModalMedia() {
+  const videoContainer = document.getElementById('modal-video-container');
+  const img = document.getElementById('modal-img');
+  const video = document.getElementById('modal-video');
+  const btn = document.getElementById('video-toggle-btn');
+
+  if (videoContainer.classList.contains('hidden')) {
+    // Switch to Video
+    videoContainer.classList.remove('hidden');
+    img.classList.add('opacity-0');
+    video.play();
+    btn.innerHTML = '<i class="fa-solid fa-image"></i> <span>Voir l’Image</span>';
+    btn.classList.replace('bg-brand-orange/90', 'bg-white/10');
+    btn.classList.add('backdrop-blur-xl', 'border', 'border-white/20');
+  } else {
+    // Switch to Image
+    videoContainer.classList.add('hidden');
+    img.classList.remove('opacity-0');
+    video.pause();
+    btn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Voir la Vidéo</span>';
+    btn.classList.replace('bg-white/10', 'bg-brand-orange/90');
+    btn.classList.remove('backdrop-blur-xl', 'border', 'border-white/20');
+  }
 }
 
 function closeProductModal() {
-  dom.productModal.classList.add('hidden');
+  const modal = dom.productModal;
+  const video = document.getElementById('modal-video');
+  if (video) video.pause();
+  modal.classList.add('hidden');
+  document.body.style.overflow = '';
 }
 
 function loadState() {
   // Optional: Add LocalStorage logic here
+}
+
+// NAVIGATION FUNCTIONS
+function toggleMobileMenu() {
+  dom.mobileMenu.classList.toggle('hidden');
+}
+
+function openAboutPage() {
+  const aboutPage = document.getElementById('about-page');
+  aboutPage.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  // Re-trigger scroll animations for the new section
+  setupScrollAnimations();
+}
+
+function closeAboutPage() {
+  document.getElementById('about-page').classList.add('hidden');
+  document.body.style.overflow = '';
 }
 
 // ANIMATION OBSERVER
