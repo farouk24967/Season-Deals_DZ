@@ -10,7 +10,7 @@ const PRODUCTS = [
     price: 5500,
     originalPrice: 7900,
     category: "ete",
-    image: "public/produit/Été/casquette-Vt-cnc.jpg",
+    image: "public/produit/Été/climatiseur-portable-powerful-cool.jpg",
     video: "public/produit/videos/Blue and Yellow Modern Business Service Promotion Mobile Video.mp4",
     isNew: true,
     description: "L'été ne sera plus un problème avec notre climatiseur portable USB nouvelle génération. Technologie de refroidissement par hydro-chill, ultra-silencieux et extrêmement économe. Parfait pour vos nuits d'été ou vos journées de bureau."
